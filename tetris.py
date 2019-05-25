@@ -60,8 +60,10 @@ def main(window):
 		if(full_lines):
 			sleep(1)
 			for i in full_lines:
-				F = np.append(np.zeros((1,field_width)),F[0:i],axis=0)
-				F = np.append(F,F[i+1:field_depth],axis=0)
+				before = F[0:i]
+				after = F[i+1:field_depth]
+				F = np.append(np.zeros((1,field_width)),before,axis=0)
+				F = np.append(F,after,axis=0)
 				lines_cleared+=1
 				window.move(i+5,0)
 				window.clrtoeol()
