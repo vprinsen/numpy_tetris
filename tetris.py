@@ -1,7 +1,22 @@
+
+#########  ##########   #########   #########   #####   #########
+#########  ##########   #########   #########   #####   #########
+#  ###  #   ###     #   #  ###  #   ###    ##    ###    ###    ##
+   ###      ###            ###      ###   ##     ###     ###
+   ###      ### #####      ###      ###  ##      ###       ###
+   ###      ### #####      ###      ### ####     ###        ###
+   ###      ###            ###      ##### ###    ###         ###
+   ###      ###     #      ###      ###    ###   ###    ##    ###
+   ###     ##########      ###      ###     ###  ###    #########
+ #######   ##########    #######   #####    ########    #########
+
+
 # -*- coding: utf-8 -*-
 # @Author: V.K. Prinsen
 # @Creation Date:   2019-05-23 09:43:00
-# @Last Modified time: 2019-05-25 16:53:54
+# @Last Modified time: 2019-05-27 07:59:58
+
+
 
 import numpy as np
 from time import sleep
@@ -19,6 +34,7 @@ class Shape():
 		self.mat = np.rot90(random.choice(shapes),random.randint(0,3))
 
 def main(window):
+	window.clear()
 	window.nodelay(1)
 	curses.curs_set(0)
 	# initialize play field
@@ -132,15 +148,34 @@ def main(window):
 	# return final score
 	return(lines_cleared)
 
+def splash_screen(window):
+	# display splash screen
+	curses.curs_set(0)
+	window.clear()
+	window.addstr(top_offset+0,left_offset,"#########   ##########   #########   #########   #####   #########")
+	window.addstr(top_offset+1,left_offset,"#########   ##########   #########   #########   #####   #########")
+	window.addstr(top_offset+2,left_offset,"#  ###  #   ###      #   #  ###  #   ###    ##    ###    ###   ##")
+	window.addstr(top_offset+3,left_offset,"   ###      ###             ###      ###   ##     ###     ###")
+	window.addstr(top_offset+4,left_offset,"   ###      ### #####       ###      ###  ##      ###       ###")
+	window.addstr(top_offset+5,left_offset,"   ###      ### #####       ###      ### ####     ###        ###")
+	window.addstr(top_offset+6,left_offset,"   ###      ###             ###      ##### ###    ###         ###")
+	window.addstr(top_offset+7,left_offset,"   ###      ###      #      ###      ###    ###   ###    ##    ###")
+	window.addstr(top_offset+8,left_offset,"   ###      ##########      ###      ###     ###  ###    #########")
+	window.addstr(top_offset+9,left_offset," #######    ##########    #######    #####    ########   #########")
+	window.addstr(top_offset+12,left_offset+6,"Тетрис originally designed and programmed by Alexey Pajitnov") 
+	window.addstr(top_offset+13,left_offset+15,"reproduced lovingly here by V.K. Prinsen")
+	window.refresh()
+	sleep(5)
+
 def gameover(window):
 	# display "Game over" overlay
-	window.move(8,0)
-	window.clrtoeol()
-	window.move(12,0)
+	window.move(top_offset+3,0)
 	window.clrtoeol()
 	window.addstr(top_offset+4,left_offset,"#"*35)
 	window.addstr(top_offset+5,left_offset,"#" +(" "*12)+"GAME OVER" + (" "*12)+  "#")
 	window.addstr(top_offset+6,left_offset,"#"*35)
+	window.move(top_offset+7,0)
+	window.clrtoeol()
 	window.refresh()
 	sleep(5)
 
@@ -241,6 +276,7 @@ left_offset = min(left_offset,get_terminal_size().columns-(field_width*3)-5)
 stop=False
 
 try:
+	curses.wrapper(splash_screen)
 	# display main game window
 	score = curses.wrapper(main)
 	# display final score
